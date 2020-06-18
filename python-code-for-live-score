@@ -1,0 +1,68 @@
+
+import requests
+from datetime import datetime
+import json
+
+class ScoreGet:
+    def __init__(self):
+        self.url_get_all_matches = "https://cricapi.com/api/matches"
+        self.get_score = "https://cricapi.com/api/cricketScore"
+        self.apikey = "YCXWNJR0Sgb1GtHRo3q2MQFv4cr2"
+        self.unique_id = ""
+    def get_unique_id(self):
+        uri_params={"apikey": self.apikey}
+        resp = requests.get(self.url_get_all_matches, params=uri_params)
+        resp_dict = resp.json()
+
+        uid_found=0
+
+        for i in resp_dict["matches"]:
+            if(i["team-1"] == "Bihar" or i["team-2"]== "India" and i["matchStarted"]):
+                todays_date = datetime.today().strftime("%y-%m-%d")
+                todays_date = str(20) + todays_date
+                if todays_date == i["date"].split("T")[0]:
+                    self.unique_id = i["unique_id"]
+                    uid_found = 1
+                    break
+        if not uid_found:
+            self.unique_id = -1
+        send_data = self.get_score_current(self.unique_id)
+        return(send_data)
+
+    def get_score_current(self,unique_id):
+        data = ""
+        if unique_id == -1:
+            data = "no india matches today"
+        else:
+            uri_params = {"apikey": self.apikey,"unique_id":unique_id}
+            resp=requests.get(self.get_score,params=uri_params)
+            data_json = resp.json()
+            try:
+                data = "here's the score : \n"+data_json['stat']+"\n"+data_json['score']
+            except KeyError as e:
+                print(e)
+        return data
+
+if __name__=="__main__":
+    obj_score=ScoreGet()
+    mess = obj_score.get_unique_id()
+
+
+    URL = 'https://www.sms4india.com/api/v1/sendCampaign'
+
+    def sendPostRequest(reqUrl, apiKey, secretKey, useType, phoneNo, senderId, textMessage):
+        req_params = {
+            'apikey': apiKey,
+            'secret': secretKey,
+            'usetype': useType,
+            'phone': phoneNo,
+            'message': textMessage,
+            'senderid': senderId
+        }
+        return requests.post(reqUrl, req_params)
+
+
+    response = sendPostRequest(URL, 'IO6HLS7C3WQMBN1OLRCTCPO9NZHTZOE6', '2AHVWTCGWE06CM8Y', 'stage', '9786511545',
+                               'james_', mess)
+
+    print(response.text)
