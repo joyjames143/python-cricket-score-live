@@ -62,7 +62,7 @@ if __name__=="__main__":
         return requests.post(reqUrl, req_params)
 
 
-    response = sendPostRequest(URL, 'IO6HLS7C3WQMBN1OLRCTCPO9NZHTZOE6', '2AHVWTCGWE06CM8Y', 'stage', '9786511545',  #--------##step 5
-                               'james_', mess)
+    response = sendPostRequest(URL, 'IO6HLS7C3WQMBN1OLRCTCPO9NZHTZOE6', '2AHVWTCGWE06CM8Y', 'stage', '978651****',  #--------##step 5
+                               'YOUR SENDER ID', mess)
 
     print(response.text)
