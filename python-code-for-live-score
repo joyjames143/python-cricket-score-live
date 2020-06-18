@@ -7,7 +7,7 @@ class ScoreGet:
     def __init__(self):
         self.url_get_all_matches = "https://cricapi.com/api/matches"
         self.get_score = "https://cricapi.com/api/cricketScore"
-        self.apikey = "YCXWNJR0Sgb1GtHRo3q2MQFv4cr2"
+        self.apikey = "YCXWNJR0Sgb1GtHRo3q2MQFv4cr2"             #--------------------------- ## step 1
         self.unique_id = ""
     def get_unique_id(self):
         uri_params={"apikey": self.apikey}
@@ -17,7 +17,7 @@ class ScoreGet:
         uid_found=0
 
         for i in resp_dict["matches"]:
-            if(i["team-1"] == "Bihar" or i["team-2"]== "India" and i["matchStarted"]):
+            if(i["team-1"] == "Bihar" or i["team-2"]== "India" and i["matchStarted"]):   #---- ## step2
                 todays_date = datetime.today().strftime("%y-%m-%d")
                 todays_date = str(20) + todays_date
                 if todays_date == i["date"].split("T")[0]:
@@ -32,7 +32,7 @@ class ScoreGet:
     def get_score_current(self,unique_id):
         data = ""
         if unique_id == -1:
-            data = "no india matches today"
+            data = "no india matches today"                    #------------------------------## step 3
         else:
             uri_params = {"apikey": self.apikey,"unique_id":unique_id}
             resp=requests.get(self.get_score,params=uri_params)
@@ -48,7 +48,7 @@ if __name__=="__main__":
     mess = obj_score.get_unique_id()
 
 
-    URL = 'https://www.sms4india.com/api/v1/sendCampaign'
+    URL = 'https://www.sms4india.com/api/v1/sendCampaign'        #-------------------------------## step 4
 
     def sendPostRequest(reqUrl, apiKey, secretKey, useType, phoneNo, senderId, textMessage):
         req_params = {
@@ -62,7 +62,7 @@ if __name__=="__main__":
         return requests.post(reqUrl, req_params)
 
 
-    response = sendPostRequest(URL, 'IO6HLS7C3WQMBN1OLRCTCPO9NZHTZOE6', '2AHVWTCGWE06CM8Y', 'stage', '9786511545',
+    response = sendPostRequest(URL, 'IO6HLS7C3WQMBN1OLRCTCPO9NZHTZOE6', '2AHVWTCGWE06CM8Y', 'stage', '9786511545',  #--------##step 5
                                'james_', mess)
 
     print(response.text)
